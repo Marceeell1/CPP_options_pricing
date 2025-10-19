@@ -1,0 +1,59 @@
+## Ignore Visual Studio temporary files, build results, and user-specific files
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+*.obj
+*.exe
+*.pdb
+*.idb
+*.ipch
+*.tlog
+*.ilk
+*.log
+*.vspscc
+*.vsp
+*.vsix
+*.ncb
+*.opendb
+*.cachefile
+*.db
+*.sdf
+*.VC.db
+*.VC.VC.opendb
+
+# Visual Studio
+.vs/
+*.VC.db
+*.VC.VC.opendb
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# JSON, backup or layout files
+*.json
+*.backup.json
+
+# Others
+*.psess
+*.vspx
+*.vsmdi
+*.vssscc
+
+# Ignore Visual Studio profiler and other intermediate files
+*.unsuccessfulbuild
+*.lastbuildstate
+
+# Ignore automatically generated files
+*.browse.VC.db
+*.code-workspace
+*.ipch
