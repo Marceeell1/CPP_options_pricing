@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\margu\\GitHubProjects\\CPP_options_pricing\\Options_pricing\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{68F0920A-CBDD-48AC-B144-F5F272AF54E7}|Options_pricing\\Options_pricing.vcxproj|C:\\Users\\margu\\GitHubProjects\\CPP_options_pricing\\Options_pricing\\Options_pricing\\Options_pricing.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{68F0920A-CBDD-48AC-B144-F5F272AF54E7}|Options_pricing\\Options_pricing.vcxproj|solutionrelative:Options_pricing\\Options_pricing.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Options_pricing.cpp",
+              "DocumentMoniker": "C:\\Users\\margu\\GitHubProjects\\CPP_options_pricing\\Options_pricing\\Options_pricing\\Options_pricing.cpp",
+              "RelativeDocumentMoniker": "Options_pricing\\Options_pricing.cpp",
+              "ToolTip": "C:\\Users\\margu\\GitHubProjects\\CPP_options_pricing\\Options_pricing\\Options_pricing\\Options_pricing.cpp",
+              "RelativeToolTip": "Options_pricing\\Options_pricing.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-19T16:03:20.44Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
