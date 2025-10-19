@@ -19,6 +19,9 @@ public:
     // Virtual destructor
     virtual ~EuropeanVanillaOption() = default;
 
+	// Friend class declaration
+    friend class BlackScholesPricer;
+
 private:
     double _strike;
 };
