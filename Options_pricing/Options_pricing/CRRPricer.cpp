@@ -16,6 +16,10 @@ CRRPricer::CRRPricer(Option* option, int depth,
 {
     // Basic validations
     if (!_option) throw std::invalid_argument("CRRPricer: option is null");
+
+    if (_option->isAsianOption())
+        throw std::invalid_argument("CRRPricer: cannot price Asian options with CRR");
+
     if (_N < 0)   throw std::invalid_argument("CRRPricer: depth < 0");
     if (_S0 <= 0) throw std::invalid_argument("CRRPricer: S0 must be > 0");
 
