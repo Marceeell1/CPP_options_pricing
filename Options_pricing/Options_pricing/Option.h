@@ -1,18 +1,19 @@
 #pragma once
+#include <vector>
 
 class Option
 {
 public:
-    // Constructor
     Option(double expiry);
 
-    // Getter for expiry
     double getExpiry() const;
 
-    // Pure virtual payoff function
     virtual double payoff(double spot) const = 0;
 
-    // Virtual destructor
+    virtual double payoffPath(const std::vector<double>& path) const;
+
+    virtual bool isAsianOption() const { return false; }
+
     virtual ~Option();
 
 private:
