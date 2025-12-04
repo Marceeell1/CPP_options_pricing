@@ -123,6 +123,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AmericanCallOption.cpp" />
+    <ClCompile Include="AmericanOption.cpp" />
+    <ClCompile Include="AmericanPutOption.cpp" />
     <ClCompile Include="AsianCallOption.cpp" />
     <ClCompile Include="AsianOption.cpp" />
     <ClCompile Include="AsianPutOption.cpp" />
@@ -131,6 +134,7 @@
     <ClCompile Include="BlackScholesPricer.cpp" />
     <ClCompile Include="CallOption.cpp" />
     <ClCompile Include="CRRPricer.cpp" />
+    <ClCompile Include="EuropeanDigitalOption.cpp" />
     <ClCompile Include="EuropeanVanillaOption.cpp" />
     <ClCompile Include="MT.cpp" />
     <ClCompile Include="Option.cpp" />
@@ -138,6 +142,9 @@
     <ClCompile Include="PutOption.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AmericanCallOption.h" />
+    <ClInclude Include="AmericanOption.h" />
+    <ClInclude Include="AmericanPutOption.h" />
     <ClInclude Include="AsianCallOption.h" />
     <ClInclude Include="AsianOption.h" />
     <ClInclude Include="AsianPutOption.h" />
@@ -146,6 +153,9 @@
     <ClInclude Include="BlackScholesPricer.h" />
     <ClInclude Include="CallOption.h" />
     <ClInclude Include="CRRPricer.h" />
+    <ClInclude Include="EuropeanDigitalCallOption.h" />
+    <ClInclude Include="EuropeanDigitalOption.h" />
+    <ClInclude Include="EuropeanDigitalPutOption.h" />
     <ClInclude Include="EuropeanVanillaOption.h" />
     <ClInclude Include="MT.h" />
     <ClInclude Include="Option.h" />
@@ -154,5 +164,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-
 </Project>

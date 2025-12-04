@@ -13,9 +13,12 @@ public:
     CRRPricer(Option* option, int depth,
         double asset_price, double up, double down, double interest_rate);
 
+    CRRPricer(Option* option, int depth,
+        double asset_price, double r, double volatility);
     // Compute H(n,i) by backward induction (CRR procedure)
     void compute();
 
+    bool getExercise(int n, int i) const;
     // Get H(n,i)
     double get(int n, int i) const;
 
@@ -28,7 +31,7 @@ private:
    
     double stockAt(int n, int i) const;     // S(n,i) = S0*(1+U)^i * (1+D)^(n-i)
     double binomCoeff(int n, int k) const;  // simple C(n,k) iteration (no big factorials)
-
+    void initializePricer(Option* option, int depth, double asset_price, double U, double D, double R);
 private:
     Option* _option;        
     int     _N;               
@@ -37,6 +40,6 @@ private:
     double  _q;                
     bool    _computed;          
     BinaryTree<double> _H;      
+    BinaryTree<bool> _exercisePolicy;
 };
-
 #endif 
