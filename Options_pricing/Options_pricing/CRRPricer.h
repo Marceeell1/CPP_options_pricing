@@ -9,22 +9,20 @@ class Option;
 
 class CRRPricer {
 public:
-    // Constructor:
+    // Constructor
     CRRPricer(Option* option, int depth,
         double asset_price, double up, double down, double interest_rate);
 
     CRRPricer(Option* option, int depth,
         double asset_price, double r, double volatility);
-    // Compute H(n,i) by backward induction (CRR procedure)
+    // Compute H(n,i) by backward induction
     void compute();
 
     bool getExercise(int n, int i) const;
     // Get H(n,i)
     double get(int n, int i) const;
 
-    // Return price H(0,0).
-    // - closed_form = false (default): uses backward induction
-    // - closed_form = true           : uses the binomial closed-form
+    // Return price H(0,0)
     double operator()(bool closed_form = false);
 
 private:

@@ -12,11 +12,11 @@ void CRRPricer::initializePricer(Option* option, int depth, double asset_price, 
     _D = D;
     _R = R;
     _computed = false;
-    _q = 0.0; // Sera calculé après la vérification d'arbitrage
+    _q = 0.0;
 
     // Basic validations
     if (!_option) throw std::invalid_argument("CRRPricer: option is null");
-    // Throw exception if option is Asian (Partie II, Q2)
+
     if (_option->isAsianOption())
         throw std::invalid_argument("CRRPricer: cannot price Asian options with CRR");
 
@@ -29,27 +29,26 @@ void CRRPricer::initializePricer(Option* option, int depth, double asset_price, 
 
     // Risk-neutral probability q = (R - D) / (U - D)
     _q = (_R - _D) / (_U - _D);
-    // Vérification de robustesse (bien que D < R < U implique 0 < q < 1)
+
     if (_q <= 0.0 || _q >= 1.0)
         throw std::invalid_argument("CRRPricer: q not strictly in (0,1)");
 
     // Initialize trees
     _H.setDepth(_N);
-    // Initialize exercise tree only if needed (Partie IV, Q4)
+    // Initialize exercise tree only if needed
     if (_option->isAmericanOption()) {
         _exercisePolicy.setDepth(_N);
     }
 }
-// Constructeur 1 (CRR standard)
+// Constructor 1 (standard CRR)
 CRRPricer::CRRPricer(Option* option, int depth,
     double asset_price, double up, double down, double interest_rate)
-    : _H(), _exercisePolicy() // Initialisation des BinaryTree
+    : _H(), _exercisePolicy()
 {
-    // Appel de la fonction utilitaire
     initializePricer(option, depth, asset_price, up, down, interest_rate);
 }
 
-// Constructeur 2 (Surcharge pour l'approximation Black-Scholes) (Partie IV, Q5)
+// Constructor 2 (Surcharge)
 CRRPricer::CRRPricer(Option* option, int depth,
     double asset_price, double r, double volatility)
     : _H(), _exercisePolicy(),
@@ -67,7 +66,6 @@ CRRPricer::CRRPricer(Option* option, int depth,
     initializePricer(option, depth, asset_price, U_bs, D_bs, R_bs);
 }
 
-// S(n,i) = S0 * (1+U)^i * (1+D)^(n-i)
 double CRRPricer::stockAt(int n, int i) const {
 
     return _S0 * std::pow(1.0 + _U, i) * std::pow(1.0 + _D, n - i);
