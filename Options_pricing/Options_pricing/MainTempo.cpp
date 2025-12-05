@@ -58,17 +58,7 @@ void TestPart1()
     }
 }
 
-class EuropeanCall : public Option {
-public:
-    EuropeanCall(double expiry, double strike)
-        : Option(expiry), _K(strike) {
-    }
-    double payoff(double S) const override {
-        return (S > _K) ? (S - _K) : 0.0;
-    }
-private:
-    double _K;
-};
+
 
 
 void TestPart2() {
@@ -83,7 +73,7 @@ void TestPart2() {
     double K = 100.0;   // strike price
 
     // 2) Create a simple option (Call)
-    EuropeanCall call(1.0, K);
+    CallOption call(1.0, K);
 
     // 3) Create CRR pricer
     CRRPricer pricer(&call, N, S0, U, D, R);
