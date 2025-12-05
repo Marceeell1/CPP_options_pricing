@@ -3,6 +3,8 @@
 #include <cmath>      
 #include <algorithm>  
 #include <stdexcept> 
+
+// Common initialization function
 void CRRPricer::initializePricer(Option* option, int depth, double asset_price, double U, double D, double R)
 {
     _option = option;
@@ -56,6 +58,7 @@ CRRPricer::CRRPricer(Option* option, int depth,
 {
     if (_N <= 0) throw std::invalid_argument("CRRPricer (BS approx): depth must be > 0");
 
+	// Compute U, D, R using Black-Scholes formulas
     double T = option->getExpiry();
     double h = T / depth;
         double U_bs = std::exp((r + (volatility * volatility) / 2.0) * h + volatility * std::sqrt(h)) - 1.0;
@@ -66,10 +69,26 @@ CRRPricer::CRRPricer(Option* option, int depth,
     initializePricer(option, depth, asset_price, U_bs, D_bs, R_bs);
 }
 
-double CRRPricer::stockAt(int n, int i) const {
 
-    return _S0 * std::pow(1.0 + _U, i) * std::pow(1.0 + _D, n - i);
+// here we use our own fast power function since n is integer
+double fastPow(double x, int n)
+{
+    double res = 1.0;
+    for (int k = 0; k < n; ++k)
+        res *= x;
+    return res;
 }
+
+
+
+// S(n,i) = S0*(1+U)^i * (1+D)^(n-i)
+double CRRPricer::stockAt(int n, int i) const
+{
+    return _S0
+        * fastPow(1.0 + _U, i)
+        * fastPow(1.0 + _D, n - i);
+}
+
 
 //C(n,k) : binomial coefficient
 double CRRPricer::binomCoeff(int n, int k) const {
@@ -86,6 +105,7 @@ double CRRPricer::binomCoeff(int n, int k) const {
 // Backward induction: CRR
 void CRRPricer::compute() {
 
+	//Forward step: compute payoffs at maturity
     for (int i = 0; i <= _N; ++i) {
         double SNi = stockAt(_N, i);
         double payoffVal = _option->payoff(SNi);
@@ -100,6 +120,7 @@ void CRRPricer::compute() {
     for (int n = _N - 1; n >= 0; --n) {
         for (int i = 0; i <= n; ++i) {
 
+            
             double upVal = _H.getNode(n + 1, i + 1);
             double downVal = _H.getNode(n + 1, i);
                 double continuationValue = disc * (_q * upVal + (1.0 - _q) * downVal);
@@ -130,6 +151,8 @@ double CRRPricer::get(int n, int i) const {
     return _H.getNode(n, i);
 }
 
+
+// to get the exercise policy at node (n,i) for American options
 bool CRRPricer::getExercise(int n, int i) const {
     if (!_computed)
         throw std::logic_error("CRRPricer::getExercise: compute() not called yet");
@@ -139,6 +162,8 @@ bool CRRPricer::getExercise(int n, int i) const {
     return _exercisePolicy.getNode(n, i);
 }
 
+
+// Return price H(0,0)
 double CRRPricer::operator()(bool closed_form) {
     // Default: use CRR procedure
     if (!closed_form) {
