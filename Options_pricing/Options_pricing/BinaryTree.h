@@ -22,7 +22,7 @@ public:
     //tree with depth N
     explicit BinaryTree(int depth) { setDepth(depth); }
 
-// Resize the depth
+    // Resize the depth
     void setDepth(int depth) {
         if (depth < 0) throw std::invalid_argument("Depth must be >= 0");
         _depth = depth;
@@ -50,45 +50,44 @@ public:
         return _tree[n][i];
     }
 
+    void printNode(int n, int i, const std::string& prefix, bool isLast) const
+    {
+        std::cout << prefix;
 
-	//function to display the tree
-    void display() const {
+        if (n != 0)   // root has no branch symbol
+            std::cout << (isLast ? "|__ " : "|-- ");
 
+        // print node value
+        std::cout << _tree[n][i] << "\n";
 
-        for (int n = 0; n <= _depth; ++n) {
+        // if not at max depth, print children
+        if (n < _depth)
+        {
+            std::string newPrefix = prefix + (isLast ? "    " : "|   ");
 
-            //Indent the current row to make it look centered
-            int indent = (_depth - n) * 3; // change 3 to adjust width
-            for (int s = 0; s < indent; ++s)
-                std::cout << ' ';
+            // Left child exists unless out of bounds
+            printNode(n + 1, i, newPrefix, false);
 
-            //  Print all values on this row
-            for (int i = 0; i <= n; ++i) {
-                std::cout << _tree[n][i];
-                if (i != n)
-                    std::cout << "  ";
-            }
-            std::cout << std::endl;
-
-            // Print one line of connectors "/   \"
-            if (n < _depth) {
-                int indent2 = indent > 0 ? indent - 1 : 0;
-                for (int s = 0; s < indent2; ++s)
-                    std::cout << ' ';
-
-                for (int i = 0; i <= n; ++i) {
-                    std::cout << '/';
-                    std::cout << "   ";
-                    std::cout << '\\';
-                    if (i != n)
-                        std::cout << ' ';
-                }
-                std::cout << std::endl;
-            }
+            // Right child
+            printNode(n + 1, i + 1, newPrefix, true);
         }
+    }
+
+    void display() const
+    {
+        if (_depth == 0)
+        {
+            std::cout << _tree[0][0] << "\n";
+            return;
+        }
+
+        // Allign root
+        std::cout << "    ";
+        printNode(0, 0, "", true);
 
         std::cout.flush();
     }
+
 
 
 };
