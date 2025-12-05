@@ -14,6 +14,8 @@ public:
 
     virtual bool isAsianOption() const { return false; }
 
+    virtual bool isAmericanOption() const { return false; }
+
     virtual ~Option();
 
 private:
