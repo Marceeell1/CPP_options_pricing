@@ -127,7 +127,7 @@ void test1() {
 
 /*
 
-int test2() {
+void test2() {
     double S0(95.), K(100.), T(0.5), r(0.02), sigma(0.2);
     std::vector<Option*> opt_ptrs;
     opt_ptrs.push_back(new CallOption(T, K));
@@ -158,7 +158,9 @@ int test2() {
     }
 }
 
-int test3() {
+*/
+
+void test3() {
     double S0(95.), K(100.), T(0.5), r(0.02), sigma(0.2);
     std::vector<Option*> opt_ptrs;
     opt_ptrs.push_back(new CallOption(T, K));
@@ -182,10 +184,9 @@ int test3() {
     }
 }
 
-*/
-
 // ---- main ----
 int main() {
-	test1();
+    test1();
+	test3();
     return 0;
 }
