@@ -2,7 +2,8 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\margu\GitHubProjects\CPP_options_pricing\Options_pricing\x64\Debug\Options_pricing.exe</FullPath>
+
+      <FullPath>C:\Users\ambro\Source\Repos\CPP_options_pricing\Options_pricing\x64\Debug\Options_pricing.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
