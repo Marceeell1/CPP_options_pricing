@@ -4,22 +4,22 @@
 class EuropeanDigitalOption : public Option
 {
 public:
-    // Type d'option digitale
+	// Option type enumeration
     enum class optionType { call, put };
 
-    // Constructeur : initialise expiry (via Option) et strike
+    // Constructor
     EuropeanDigitalOption(double expiry, double strike);
 
-    // Getter pour le strike
+	// to get the strike
     double getStrike() const;
 
-    // Méthode virtuelle pour connaître le type (call/put)
+	// function to get option type
     virtual optionType GetOptionType() const = 0;
 
-    // Destructeur virtuel
+	// Virtual destructor
     virtual ~EuropeanDigitalOption() = default;
 
-    // BlackScholesPricer a accès aux membres privés
+	// Grant access to BlackScholesPricer
     friend class BlackScholesPricer;
 
 private:
