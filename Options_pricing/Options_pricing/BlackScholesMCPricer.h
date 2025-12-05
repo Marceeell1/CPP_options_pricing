@@ -13,7 +13,7 @@ public:
 	
 	void generate(int nb_paths);
 
-	std::vector<double> generatePath(int m);
+	std::vector<double> generatePath();
 
 	double operator()() const;
 
