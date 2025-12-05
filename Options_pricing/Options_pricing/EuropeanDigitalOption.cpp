@@ -1,6 +1,8 @@
 #include "EuropeanDigitalOption.h"
 #include <stdexcept>
 
+
+// Constructor 
 EuropeanDigitalOption::EuropeanDigitalOption(double expiry, double strike)
     : Option(expiry), _strike(strike)
 {
@@ -8,6 +10,7 @@ EuropeanDigitalOption::EuropeanDigitalOption(double expiry, double strike)
         throw std::invalid_argument("Expiry and strike must be non-negative.");
 }
 
+//to get the strike
 double EuropeanDigitalOption::getStrike() const
 {
     return _strike;

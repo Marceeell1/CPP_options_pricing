@@ -51,7 +51,7 @@ public:
     }
 
 
-
+	//function to display the tree
     void display() const {
 
 
