@@ -1,7 +1,7 @@
 #include "AsianPutOption.h"
 #include <iostream>
-AsianPutOption::AsianPutOption(double expiry, double strike, const std::vector<double>& timeSteps)
-	: AsianOption(expiry, timeSteps), _strike(strike) {
+AsianPutOption::AsianPutOption(const std::vector<double>& timeSteps, double strike)
+	: AsianOption(timeSteps.back(), timeSteps), _strike(strike) {
 	if (strike < 0) {
 		std::cerr << "[Error] Negative strike in AsianPutOption.\n";
 	}
