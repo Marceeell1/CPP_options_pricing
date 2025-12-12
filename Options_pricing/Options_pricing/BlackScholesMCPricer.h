@@ -28,5 +28,7 @@ private:
 	int _nbPaths;
 	double _mean;
 	double _M2;
+
+	void compute_d1_d2(double K, double T, double& d1, double& d2) const;
 };
 #endif

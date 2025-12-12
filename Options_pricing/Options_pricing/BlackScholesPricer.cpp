@@ -111,3 +111,12 @@ double BlackScholesPricer::delta() const
 
     throw std::runtime_error("BlackScholesPricer: delta not implemented for this option type");
 }
+
+void BlackScholesPricer::compute_d1_d2(double K, double T,
+    double& d1, double& d2) const
+{
+    double sqrtT = std::sqrt(T);
+    d1 = (std::log(_S / K) + (_r + 0.5 * _sigma * _sigma) * T)
+        / (_sigma * sqrtT);
+    d2 = d1 - _sigma * sqrtT;
+}
