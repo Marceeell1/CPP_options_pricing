@@ -43,9 +43,8 @@ void CRRPricer::initializePricer(Option* option, int depth, double asset_price, 
     }
 }
 // Constructor 1 (standard CRR)
-CRRPricer::CRRPricer(Option* option, int depth,
-    double asset_price, double up, double down, double interest_rate)
-    : _H(), _exercisePolicy()
+CRRPricer::CRRPricer(Option* option, int depth, double asset_price, double up, double down, double interest_rate): 
+    _H(), _exercisePolicy()
 {
     initializePricer(option, depth, asset_price, up, down, interest_rate);
 }
@@ -58,15 +57,19 @@ CRRPricer::CRRPricer(Option* option, int depth,
 {
     if (_N <= 0) throw std::invalid_argument("CRRPricer (BS approx): depth must be > 0");
 
-	// Compute U, D, R using Black-Scholes formulas
     double T = option->getExpiry();
     double h = T / depth;
-        double U_bs = std::exp((r + (volatility * volatility) / 2.0) * h + volatility * std::sqrt(h)) - 1.0;
-    double D_bs = std::exp((r + (volatility * volatility) / 2.0) * h - volatility * std::sqrt(h)) - 1.0; 
-    double R_bs = std::exp(r * h) - 1.0;
-        D_bs = std::exp((r - (volatility * volatility) / 2.0) * h - volatility * std::sqrt(h)) - 1.0;
+
+    double u = std::exp(volatility * std::sqrt(h));
+    double d = std::exp(-volatility * std::sqrt(h));
+    double Rfac = std::exp(r * h);
+
+    double U_bs = u - 1.0;
+    double D_bs = d - 1.0;
+    double R_bs = Rfac - 1.0;
 
     initializePricer(option, depth, asset_price, U_bs, D_bs, R_bs);
+
 }
 
 
