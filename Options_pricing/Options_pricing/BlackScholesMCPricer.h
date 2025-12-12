@@ -26,7 +26,7 @@ private:
 	double _sigma;
 
 	int _nbPaths;
-	double _mean;
-	double _M2;
+	double _sumPayoffs = 0.0;
+	double _sumPayoffs2 = 0.0;
 };
 #endif
