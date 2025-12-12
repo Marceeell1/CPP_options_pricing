@@ -199,6 +199,8 @@ void resultSharing() {
 
     CRRPricer* pricer;
 
+    std::cout << "CRR pricing" << std::endl << std::endl;
+
     for (auto& opt_ptr : opt_ptrs) {
         pricer = new CRRPricer(opt_ptr, N, S0, U, D, r);
 
@@ -211,9 +213,75 @@ void resultSharing() {
     }
 }
 
+void resultSharingBlackScholes() {
+    // Option Params
+    double T(5.), S0(100.), r(0.01), sigma(0.1), K(101.);
+
+    std::vector<Option*> opt_ptrs;
+    opt_ptrs.push_back(new CallOption(T, K));
+    opt_ptrs.push_back(new EuropeanDigitalCallOption(T, K));
+    opt_ptrs.push_back(new PutOption(T, K));
+    opt_ptrs.push_back(new EuropeanDigitalPutOption(T, K));
+
+    BlackScholesPricer* pricer;
+
+    std::cout << "Black-Scholes pricing" << std::endl << std::endl;
+
+    for (auto& opt_ptr : opt_ptrs) {
+        pricer = new BlackScholesPricer(opt_ptr, S0, r, sigma);
+
+        std::cout << "price: " << (*pricer)()
+            << ", delta: " << pricer->delta()
+            << std::endl << std::endl;
+
+        delete pricer;
+        delete opt_ptr;
+    }
+}
+
+void resultSharingMonteCarlo() {
+    // Option params
+    double S0(100.), K(101.), T(5.), r(0.01), sigma(0.1);
+
+    // Fixing dates for Asian options
+    std::vector<double> fixing_dates;
+    for (int i = 1; i <= 5; i++) {
+        fixing_dates.push_back(i * T / 5.0);
+    }
+
+    std::vector<Option*> opt_ptrs;
+    opt_ptrs.push_back(new CallOption(T, K));
+    opt_ptrs.push_back(new AsianCallOption(fixing_dates, K));
+    opt_ptrs.push_back(new EuropeanDigitalCallOption(T, K));
+    opt_ptrs.push_back(new PutOption(T, K));
+    opt_ptrs.push_back(new EuropeanDigitalPutOption(T, K));
+    opt_ptrs.push_back(new AsianPutOption(fixing_dates, K));
+
+    BlackScholesMCPricer* pricer;
+    std::vector<double> ci;
+
+    std::cout << "Monte Carlo pricing" << std::endl << std::endl;
+
+    for (auto& opt_ptr : opt_ptrs) {
+        pricer = new BlackScholesMCPricer(opt_ptr, S0, r, sigma);
+        do {
+            pricer->generate(10);
+            ci = pricer->confidenceInterval();
+        } while (ci[1] - ci[0] > 1e-2);
+
+        std::cout << "nb samples: " << pricer->getNbPaths() << std::endl;
+        std::cout << "price: " << (*pricer)() << std::endl << std::endl;
+
+        delete pricer;
+        delete opt_ptr;
+    }
+}
+
+
+
 // ---- main ----
 int main() {
-    resultSharing();
+    resultSharingMonteCarlo();
 	//test3();
     return 0;
 }

@@ -31,18 +31,23 @@ std::vector<double> BlackScholesMCPricer::generatePath()
             throw std::runtime_error("BlackScholesMCPricer: AsianOption has empty timeSteps");
 
         path.resize(times.size());
-        path[0] = _S0;
 
-        for (std::size_t k = 1; k < times.size(); ++k) {
-            double dt = times[k] - times[k - 1];
+        double S = _S0;
+        double prev_time = 0.0;
+
+        for (std::size_t k = 0; k < times.size(); ++k) {
+            double dt = times[k] - prev_time;
             if (dt <= 0.0)
                 throw std::runtime_error("BlackScholesMCPricer: non-positive time step in AsianOption");
 
             double dz = MT::rand_norm();
-            path[k] = path[k - 1] * std::exp(
+            S = S * std::exp(
                 (_r - 0.5 * _sigma * _sigma) * dt +
                 _sigma * std::sqrt(dt) * dz
             );
+
+            path[k] = S;
+            prev_time = times[k];
         }
     }
     // european case: one point at T
@@ -69,20 +74,16 @@ void BlackScholesMCPricer::generate(int nb_paths) {
     for (int i = 0; i < nb_paths; ++i) {
         std::vector<double> path = generatePath();
 
-        // 2. Calculate the payoff for the generated path
+        // Calculate the payoff for the generated path
         double payoff = _option->payoffPath(path);
 
-        // 3. Discount the payoff to time 0 
-        double discPayoff = std::exp(-_r * T) * payoff;
-
-
-        _nbPaths++;// Increase the path count
+        _nbPaths++; // Increase the path count
 
 
         // Welford's algorithm for updating the mean and variance:
-        double delta = discPayoff - _mean;
+        double delta = payoff - _mean;
         _mean += delta / static_cast<double>(_nbPaths);
-        double delta2 = discPayoff - _mean;
+        double delta2 = payoff - _mean;
         _M2 += delta * delta2;
     }
 }
