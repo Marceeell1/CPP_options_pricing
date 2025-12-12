@@ -31,9 +31,8 @@ double BlackScholesPricer::operator()() const
         double T = vanilla->getExpiry();
         double K = vanilla->getStrike();
 
-        double d1 = (std::log(_S / K) + (_r + 0.5 * _sigma * _sigma) * T)
-            / (_sigma * std::sqrt(T));
-        double d2 = d1 - _sigma * std::sqrt(T);
+        double d1, d2;
+        compute_d1_d2(K, T, d1, d2);
 
         if (vanilla->GetOptionType() == EuropeanVanillaOption::optionType::call)
         {
@@ -51,9 +50,8 @@ double BlackScholesPricer::operator()() const
         double T = digital->getExpiry();
         double K = digital->getStrike();
 
-        double d1 = (std::log(_S / K) + (_r + 0.5 * _sigma * _sigma) * T)
-            / (_sigma * std::sqrt(T));
-        double d2 = d1 - _sigma * std::sqrt(T);
+        double d1, d2;
+        compute_d1_d2(K, T, d1, d2);
 
         // Cash-or-nothing digital options
         if (digital->GetOptionType() == EuropeanDigitalOption::optionType::call)
@@ -79,8 +77,8 @@ double BlackScholesPricer::delta() const
         double T = vanilla->getExpiry();
         double K = vanilla->getStrike();
 
-        double d1 = (std::log(_S / K) + (_r + 0.5 * _sigma * _sigma) * T)
-            / (_sigma * std::sqrt(T));
+        double d1, d2;
+        compute_d1_d2(K, T, d1, d2);
 
         if (vanilla->GetOptionType() == EuropeanVanillaOption::optionType::call)
             return N(d1);
@@ -94,9 +92,8 @@ double BlackScholesPricer::delta() const
         double T = digital->getExpiry();
         double K = digital->getStrike();
 
-        double d1 = (std::log(_S / K) + (_r + 0.5 * _sigma * _sigma) * T)
-            / (_sigma * std::sqrt(T));
-        double d2 = d1 - _sigma * std::sqrt(T);
+        double d1, d2;
+        compute_d1_d2(K, T, d1, d2);
 
         const double inv_sqrt_2pi = 1.0 / std::sqrt(2.0 * PI);
         double pdf_d2 = inv_sqrt_2pi * std::exp(-0.5 * d2 * d2);
@@ -112,6 +109,7 @@ double BlackScholesPricer::delta() const
     throw std::runtime_error("BlackScholesPricer: delta not implemented for this option type");
 }
 
+// Compute d1 and d2 for the Black-Scholes formula
 void BlackScholesPricer::compute_d1_d2(double K, double T,
     double& d1, double& d2) const
 {
