@@ -182,7 +182,7 @@ void test3() {
 }
 
 
-void resultSharing() {
+void resultSharingCRR() {
     // Option Params
     double T(5.), S0(100.), r(0.01), sigma(0.1), K(101.);
     // CRR Params
@@ -281,7 +281,11 @@ void resultSharingMonteCarlo() {
 
 // ---- main ----
 int main() {
+    resultSharingCRR();
+    resultSharingBlackScholes();
     resultSharingMonteCarlo();
+	//test1();
+	//test2();
 	//test3();
     return 0;
 }
