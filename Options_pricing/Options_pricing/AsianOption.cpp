@@ -15,6 +15,6 @@ double AsianOption::payoffPath(const std::vector<double>& path) const {
 		sum += s;
 	}
 	double average = sum / static_cast<double>(path.size());
-	return average;
+	return payoff(average);
 
 }
