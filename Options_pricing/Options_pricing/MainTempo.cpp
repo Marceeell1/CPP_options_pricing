@@ -125,6 +125,8 @@ void test1() {
 }
 
 
+
+
 void test2() {
     double S0(95.), K(100.), T(0.5), r(0.02), sigma(0.2);
     std::vector<Option*> opt_ptrs;
@@ -155,6 +157,7 @@ void test2() {
         delete opt_ptr;
     }
 }
+
 
 
 void test3() {
@@ -283,5 +286,8 @@ void resultSharingMonteCarlo() {
 int main() {
     resultSharingMonteCarlo();
 	//test3();
+    test1();
+	test3();
+    test2();
     return 0;
 }

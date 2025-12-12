@@ -5,7 +5,7 @@
 #include <stdexcept>
 
 BlackScholesMCPricer::BlackScholesMCPricer(Option* option, double initial_price, double interest_rate, double volatility)
-	:_option(option),_S0(initial_price),_r(interest_rate),_sigma(volatility),_nbPaths(0),_mean(0.0),_M2(0.0)
+	:_option(option),_S0(initial_price),_r(interest_rate),_sigma(volatility),_nbPaths(0), _sumPayoffs(0.0),_sumPayoffs2(0.0)
 {
     if (!_option) throw std::invalid_argument("Option is null");
     if (_S0 <= 0.0) throw std::invalid_argument("Initial price must be positive");
@@ -77,14 +77,13 @@ void BlackScholesMCPricer::generate(int nb_paths) {
         // Calculate the payoff for the generated path
         double payoff = _option->payoffPath(path);
 
-        _nbPaths++; // Increase the path count
+        // 3. Discount the payoff to time 0 
+        double discPayoff = std::exp(-_r * T) * payoff;
 
 
-        // Welford's algorithm for updating the mean and variance:
-        double delta = payoff - _mean;
-        _mean += delta / static_cast<double>(_nbPaths);
-        double delta2 = payoff - _mean;
-        _M2 += delta * delta2;
+        _nbPaths++;// Increase the path count
+        _sumPayoffs += discPayoff;
+        _sumPayoffs2 += discPayoff * discPayoff;
     }
 }
 
@@ -92,12 +91,13 @@ std::vector<double> BlackScholesMCPricer::confidenceInterval() const {
     if (_nbPaths < 2)
         throw std::runtime_error("BlackScholesMCPricer::confidenceInterval: not enough paths");
 
-    double variance = _M2 / static_cast<double>(_nbPaths - 1);  // unbiased variance
+    double mean = _sumPayoffs / static_cast<double>(_nbPaths);
+    double variance = (_sumPayoffs2 - _sumPayoffs * _sumPayoffs / _nbPaths) / (_nbPaths - 1);
     double stddev = std::sqrt(variance);
 
     std::vector<double> ci(2);
-    ci[0] = _mean - 1.96 * stddev / std::sqrt(static_cast<double>(_nbPaths));
-    ci[1] = _mean + 1.96 * stddev / std::sqrt(static_cast<double>(_nbPaths));
+    ci[0] = mean - 1.96 * stddev / std::sqrt(static_cast<double>(_nbPaths));
+    ci[1] = mean + 1.96 * stddev / std::sqrt(static_cast<double>(_nbPaths));
 
     return ci;
 }
@@ -106,5 +106,5 @@ double BlackScholesMCPricer::operator()() const {
     if (_nbPaths == 0) {
         throw std::runtime_error("No simulation");
     }
-    return exp(-_r * _option->getExpiry()) * _mean;  // Estimation of the actualised price
+    return _sumPayoffs / static_cast<double>(_nbPaths);;  // Estimation of the actualised price
 }
