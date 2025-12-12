@@ -14,7 +14,7 @@ public:
 	// Payoff implementation
     double payoff(double spot) const override
     {
-        return (spot >= getStrike()) ? 1.0 : 0.0;
+        return (spot <= getStrike()) ? 1.0 : 0.0;
     }
 
 	// Get option type
