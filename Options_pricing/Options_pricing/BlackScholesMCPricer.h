@@ -26,7 +26,9 @@ private:
 	double _sigma;
 
 	int _nbPaths;
-	double _sumPayoffs = 0.0;
-	double _sumPayoffs2 = 0.0;
+	double _mean;
+	double _M2;
+
+	void compute_d1_d2(double K, double T, double& d1, double& d2) const;
 };
 #endif
