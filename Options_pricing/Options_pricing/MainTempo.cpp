@@ -125,8 +125,6 @@ void test1() {
 }
 
 
-/*
-
 void test2() {
     double S0(95.), K(100.), T(0.5), r(0.02), sigma(0.2);
     std::vector<Option*> opt_ptrs;
@@ -158,7 +156,6 @@ void test2() {
     }
 }
 
-*/
 
 void test3() {
     double S0(95.), K(100.), T(0.5), r(0.02), sigma(0.2);
@@ -184,9 +181,39 @@ void test3() {
     }
 }
 
+
+void resultSharing() {
+    // Option Params
+    double T(5.), S0(100.), r(0.01), sigma(0.1), K(101.);
+    // CRR Params
+    double R(0.01), U(0.05), D(-0.045);
+    int N(5);
+
+    std::vector<Option*> opt_ptrs;
+	opt_ptrs.push_back(new CallOption(T, K));
+    opt_ptrs.push_back(new EuropeanDigitalCallOption(T, K));
+    opt_ptrs.push_back(new AmericanCallOption(T, K));
+	opt_ptrs.push_back(new PutOption(T, K));
+    opt_ptrs.push_back(new EuropeanDigitalPutOption(T, K));
+    opt_ptrs.push_back(new AmericanPutOption(T, K));
+
+    CRRPricer* pricer;
+
+    for (auto& opt_ptr : opt_ptrs) {
+        pricer = new CRRPricer(opt_ptr, N, S0, U, D, r);
+
+        pricer->compute();
+
+        std::cout << "price: " << (*pricer)() << std::endl << std::endl;
+        delete pricer;
+        delete opt_ptr;
+
+    }
+}
+
 // ---- main ----
 int main() {
-    test1();
-	test3();
+    resultSharing();
+	//test3();
     return 0;
 }
