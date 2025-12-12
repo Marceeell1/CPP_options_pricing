@@ -8,9 +8,9 @@ class BlackScholesMCPricer
 {
 public:
 	BlackScholesMCPricer(Option* option, double initial_price, double interest_rate, double volatility);
-	
+
 	int getNbPaths() const;
-	
+
 	void generate(int nb_paths);
 
 	std::vector<double> generatePath();
@@ -26,9 +26,7 @@ private:
 	double _sigma;
 
 	int _nbPaths;
-	double _mean;
-	double _M2;
-
-	void compute_d1_d2(double K, double T, double& d1, double& d2) const;
+	double _sumPayoffs = 0.0;
+	double _sumPayoffs2 = 0.0;
 };
 #endif
