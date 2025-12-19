@@ -43,7 +43,7 @@ void CRRPricer::initializePricer(Option* option, int depth, double asset_price, 
     }
 }
 // Constructor 1 (standard CRR)
-CRRPricer::CRRPricer(Option* option, int depth, double asset_price, double up, double down, double interest_rate): 
+CRRPricer::CRRPricer(Option* option, int depth, double asset_price, double up, double down, double interest_rate) :
     _H(), _exercisePolicy()
 {
     initializePricer(option, depth, asset_price, up, down, interest_rate);
@@ -73,13 +73,16 @@ CRRPricer::CRRPricer(Option* option, int depth,
 }
 
 
-// here we use our own fast power function since n is integer
-double fastPow(double x, int n)
+
+void fastPowStep(double& current, double base)
 {
-    double res = 1.0;
-    for (int k = 0; k < n; ++k)
-        res *= x;
-    return res;
+    current *= base;
+}
+
+void binomCoeffStep(double& current, int N, int i)
+{
+    // C(N,i+1) = C(N,i) * (N - i) / (i + 1)
+    current *= static_cast<double>(N - i) / static_cast<double>(i + 1);
 }
 
 
@@ -87,28 +90,24 @@ double fastPow(double x, int n)
 // S(n,i) = S0*(1+U)^i * (1+D)^(n-i)
 double CRRPricer::stockAt(int n, int i) const
 {
-    return _S0
-        * fastPow(1.0 + _U, i)
-        * fastPow(1.0 + _D, n - i);
-}
+    double prod = 1.0;
 
-
-//C(n,k) : binomial coefficient
-double CRRPricer::binomCoeff(int n, int k) const {
-    if (k < 0 || k > n) return 0.0;
-    if (k > n - k) k = n - k;  // symmetry to reduce loop
-    long double c = 1.0L;
-    for (int i = 1; i <= k; ++i) {
-        c = c * (n - (k - i));
-        c /= i;
+    for (int k = 0; k < n; ++k) {
+        if (k < i) fastPowStep(prod, 1.0 + _U);
+        else       fastPowStep(prod, 1.0 + _D);
     }
-    return static_cast<double>(c);
+
+    return _S0 * prod;
 }
+
+
+
+
 
 // Backward induction: CRR
 void CRRPricer::compute() {
 
-	//Forward step: compute payoffs at maturity
+    //Forward step: compute payoffs at maturity
     for (int i = 0; i <= _N; ++i) {
         double SNi = stockAt(_N, i);
         double payoffVal = _option->payoff(SNi);
@@ -123,19 +122,19 @@ void CRRPricer::compute() {
     for (int n = _N - 1; n >= 0; --n) {
         for (int i = 0; i <= n; ++i) {
 
-            
+
             double upVal = _H.getNode(n + 1, i + 1);
             double downVal = _H.getNode(n + 1, i);
-                double continuationValue = disc * (_q * upVal + (1.0 - _q) * downVal);
+            double continuationValue = disc * (_q * upVal + (1.0 - _q) * downVal);
 
             double finalValue;
 
             if (_option->isAmericanOption()) {
-                    double intrinsicValue = _option->payoff(stockAt(n, i));
+                double intrinsicValue = _option->payoff(stockAt(n, i));
 
                 finalValue = std::max(continuationValue, intrinsicValue);
 
-                    bool exercise = (intrinsicValue >= continuationValue);
+                bool exercise = (intrinsicValue >= continuationValue);
                 _exercisePolicy.setNode(n, i, exercise);
 
             }
@@ -178,14 +177,39 @@ double CRRPricer::operator()(bool closed_form) {
         throw std::logic_error("CRRPricer::operator(): Closed-form formula is not applicable to American options.");
     }
 
-    // Closed-form:
+    // Closed-form
     double sum = 0.0;
+
+    // Initialisations for i = 0
+    double coeff = 1.0;            // C(N,0)
+    double qPow = 1.0;             // q^0
+    double oneMinusQPow = 1.0;     // (1-q)^N
+
+    // (1-q)^N
+    for (int k = 0; k < _N; ++k)
+        fastPowStep(oneMinusQPow, 1.0 - _q);
+
+    const double invOneMinusQ = 1.0 / (1.0 - _q);
+
     for (int i = 0; i <= _N; ++i) {
+
         double SNi = stockAt(_N, i);
         double hval = _option->payoff(SNi);
-        double term = binomCoeff(_N, i) * std::pow(_q, i) * std::pow(1.0 - _q, _N - i) * hval;
-        sum += term;
+
+        sum += coeff * qPow * oneMinusQPow * hval;
+
+        // update when we go from i to i+1
+        if (i < _N) {
+            binomCoeffStep(coeff, _N, i);      // C(N,i+1)
+            fastPowStep(qPow, _q);             // q^(i+1)
+            fastPowStep(oneMinusQPow, invOneMinusQ); // (1-q)^(N-(i+1))
+        }
     }
-    double disc = std::pow(1.0 + _R, _N);
+
+    double disc = 1.0;
+    for (int k = 0; k < _N; ++k)
+        fastPowStep(disc, 1.0 + _R);
+
     return sum / disc;
+
 }

@@ -8,9 +8,9 @@ class BlackScholesMCPricer
 {
 public:
 	BlackScholesMCPricer(Option* option, double initial_price, double interest_rate, double volatility);
-	
+
 	int getNbPaths() const;
-	
+
 	void generate(int nb_paths);
 
 	std::vector<double> generatePath();
