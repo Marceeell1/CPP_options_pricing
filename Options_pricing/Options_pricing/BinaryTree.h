@@ -60,15 +60,12 @@ public:
         // print node value
         std::cout << _tree[n][i] << "\n";
 
-        // if not at max depth, print children
+
         if (n < _depth)
         {
             std::string newPrefix = prefix + (isLast ? "    " : "|   ");
 
-            // Left child exists unless out of bounds
             printNode(n + 1, i, newPrefix, false);
-
-            // Right child
             printNode(n + 1, i + 1, newPrefix, true);
         }
     }
