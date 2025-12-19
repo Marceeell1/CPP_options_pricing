@@ -27,9 +27,10 @@ public:
 
 private:
    
-    double stockAt(int n, int i) const;     // S(n,i) = S0*(1+U)^i * (1+D)^(n-i)
-    double binomCoeff(int n, int k) const;  // simple C(n,k) iteration (no big factorials)
+    double stockAt(int n, int i) const;     // S(n,i)
     void initializePricer(Option* option, int depth, double asset_price, double U, double D, double R);
+
+
 private:
     Option* _option;        
     int     _N;               

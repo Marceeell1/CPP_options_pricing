@@ -73,7 +73,7 @@ CRRPricer::CRRPricer(Option* option, int depth,
 }
 
 
-
+//here, we use these helper functions to speed up the computation power and to avoid repetitive calculation
 void fastPowStep(double& current, double base)
 {
     current *= base;
