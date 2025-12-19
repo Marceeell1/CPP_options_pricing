@@ -80,8 +80,7 @@ void BlackScholesMCPricer::generate(int nb_paths) {
         // 3. Discount the payoff to time 0 
         double discPayoff = std::exp(-_r * T) * payoff;
 
-
-        _nbPaths++;// Increase the path count
+        _nbPaths++;
         _sumPayoffs += discPayoff;
         _sumPayoffs2 += discPayoff * discPayoff;
     }
@@ -106,5 +105,5 @@ double BlackScholesMCPricer::operator()() const {
     if (_nbPaths == 0) {
         throw std::runtime_error("No simulation");
     }
-    return _sumPayoffs / static_cast<double>(_nbPaths);;  // Estimation of the actualised price
+    return _sumPayoffs / static_cast<double>(_nbPaths);  // Estimation of the actualised price
 }

@@ -1,4 +1,4 @@
-#include "MT.h"
+ #include "MT.h"
 
 MT::MT() : mt(std::random_device{}()), uniformDist(0.0,1.0), normalDist(0.0,1.0){}
 
