@@ -77,7 +77,7 @@ void BlackScholesMCPricer::generate(int nb_paths) {
         // Calculate the payoff for the generated path
         double payoff = _option->payoffPath(path);
 
-        // 3. Discount the payoff to time 0 
+        // discount the payoff at time 0 
         double discPayoff = std::exp(-_r * T) * payoff;
 
         _nbPaths++;
