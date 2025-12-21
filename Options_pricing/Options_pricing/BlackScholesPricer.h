@@ -8,7 +8,7 @@ public:
 	BlackScholesPricer(Option* option, double asset_price,
 		double interest_rate, double volatility);
 
-	double operator()() const; // returns the option price
+	double operator()() const;
     double delta() const; // returns Delta
 
 private:
