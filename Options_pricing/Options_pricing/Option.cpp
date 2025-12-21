@@ -1,5 +1,6 @@
 #include "Option.h"
 #include <iostream>
+#include <stdexcept>
 
 // Constructor
 Option::Option(double expiry) : _expiry(expiry) {}
@@ -11,8 +12,7 @@ double Option::getExpiry() const {
 
 double Option::payoffPath(const std::vector<double>& path) const {
     if (path.empty()) {
-        std::cerr << "[Erreur] payoffPath() : le vecteur 'path' est vide." << std::endl;
-        return 0;
+        throw std::invalid_argument("Option::payoffPath: empty path");
     }
     return payoff(path.back());
 }
