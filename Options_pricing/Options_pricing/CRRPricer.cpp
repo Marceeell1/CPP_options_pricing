@@ -60,13 +60,12 @@ CRRPricer::CRRPricer(Option* option, int depth,
     double T = option->getExpiry();
     double h = T / depth;
 
-    double u = std::exp(volatility * std::sqrt(h));
-    double d = std::exp(-volatility * std::sqrt(h));
-    double Rfac = std::exp(r * h);
+    double drift = (r + 0.5 * volatility * volatility) * h;
 
-    double U_bs = u - 1.0;
-    double D_bs = d - 1.0;
-    double R_bs = Rfac - 1.0;
+    double U_bs = std::exp(drift + volatility * std::sqrt(h)) - 1.0;
+    double D_bs = std::exp(drift - volatility * std::sqrt(h)) - 1.0;
+    double R_bs = std::exp(r * h) - 1.0;
+
 
     initializePricer(option, depth, asset_price, U_bs, D_bs, R_bs);
 

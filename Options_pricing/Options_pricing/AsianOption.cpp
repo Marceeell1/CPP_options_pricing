@@ -18,3 +18,6 @@ double AsianOption::payoffPath(const std::vector<double>& path) const {
 	return payoff(average);
 
 }
+AsianOption::AsianOption(const std::vector<double>& timeSteps)
+	: Option(timeSteps.back()), _timeSteps(timeSteps) {
+}

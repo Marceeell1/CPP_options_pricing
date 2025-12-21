@@ -44,7 +44,7 @@ public:
     }
 
     // to get the value of the node (n, i)
-    const T& getNode(int n, int i) const {
+    T getNode(int n, int i) const {
         if (n < 0 || n > _depth || i < 0 || i > n)
             throw std::out_of_range("getNode: indices out of range");
         return _tree[n][i];
