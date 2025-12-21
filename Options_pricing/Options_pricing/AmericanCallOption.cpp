@@ -5,7 +5,13 @@ AmericanCallOption::AmericanCallOption(double expiry, double strike)
     : AmericanOption(expiry, strike){}
 
 double AmericanCallOption::payoff(double spot) const {
-    return std::max(spot - getStrike(), 0.0);
+    double strike = getStrike();
+    
+    if (strike < spot) {
+        return spot - strike;
+    } else {
+        return 0.0;
+    }
 }
 
 AmericanCallOption::~AmericanCallOption() = default;
