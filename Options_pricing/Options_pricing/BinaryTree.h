@@ -11,8 +11,8 @@
 template <typename T>
 class BinaryTree {
 private:
-    int _depth;                               // = N
-    std::vector<std::vector<T>> _tree;        // data: row n has n+1 values
+    int _depth;
+    std::vector<std::vector<T>> _tree; // data: row n has n+1 values
 
 public:
 
@@ -78,7 +78,7 @@ public:
             return;
         }
 
-        // Allign root
+		// Allign the root (just for ethetics)
         std::cout << "    ";
         printNode(0, 0, "", true);
 

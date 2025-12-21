@@ -1,6 +1,6 @@
 #include "PutOption.h"
 
-// Constructor: initializes expiry and strike
+// Constructor
 PutOption::PutOption(double expiry, double strike)
 	: EuropeanVanillaOption(expiry, strike)
 {

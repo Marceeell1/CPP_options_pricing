@@ -1,5 +1,5 @@
 #include "EuropeanVanillaOption.h"
-#include <stdexcept>  // for std::invalid_argument
+#include <stdexcept>
 
 // Constructor with input validation
 EuropeanVanillaOption::EuropeanVanillaOption(double expiry, double strike)

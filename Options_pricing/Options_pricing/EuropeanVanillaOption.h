@@ -4,22 +4,18 @@
 class EuropeanVanillaOption : public Option
 {
 public:
-    // Enum for option type
     enum class optionType { call, put };
 
-    // Constructor: initializes _expiry and _strike
     EuropeanVanillaOption(double expiry, double strike);
 
-    // Getter for strike
     double getStrike() const;
 
-    // Pure virtual method
+    // pure virtual method
     virtual optionType GetOptionType() const = 0;
 
-    // Virtual destructor
+    // virtual destructor
     virtual ~EuropeanVanillaOption() = default;
 
-	// Friend class declaration
     friend class BlackScholesPricer;
 
 private:

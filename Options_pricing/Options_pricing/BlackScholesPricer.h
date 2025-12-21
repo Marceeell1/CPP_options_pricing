@@ -1,6 +1,6 @@
 #pragma once
 #include "EuropeanVanillaOption.h"
-#include <cmath>  // for exp, log, sqrt, erfc
+#include <cmath>
 
 class BlackScholesPricer
 {
@@ -8,8 +8,8 @@ public:
 	BlackScholesPricer(Option* option, double asset_price,
 		double interest_rate, double volatility);
 
-	double operator()() const;  // returns the option price
-    double delta() const;       // returns Delta
+	double operator()() const; // returns the option price
+    double delta() const; // returns Delta
 
 private:
 	Option* _option;
@@ -17,6 +17,6 @@ private:
 	double _r;  // interest rate
 	double _sigma;  // volatility
 
-	double N(double x) const; // normal cumulative distribution function
+	double N(double x) const; // normal cdf
 	void compute_d1_d2(double K, double T, double& d1, double& d2) const;
 };

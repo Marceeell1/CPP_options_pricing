@@ -6,7 +6,6 @@ class EuropeanDigitalPutOption : public EuropeanDigitalOption
 {
 public:
 
-	// Constructor
     EuropeanDigitalPutOption(double expiry, double strike)
         : EuropeanDigitalOption(expiry, strike) {
     }

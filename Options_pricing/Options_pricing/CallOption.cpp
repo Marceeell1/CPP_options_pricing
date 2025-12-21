@@ -1,6 +1,6 @@
 #include "CallOption.h"
 
-// Constructor: initializes expiry and strike
+// Constructor
 CallOption::CallOption(double expiry, double strike)
 	: EuropeanVanillaOption(expiry, strike)
 {

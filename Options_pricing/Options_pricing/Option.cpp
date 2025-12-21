@@ -1,10 +1,10 @@
 #include "Option.h"
 #include <iostream>
 
-// Constructor definition
+// Constructor
 Option::Option(double expiry) : _expiry(expiry) {}
 
-// Getter definition
+// Getter
 double Option::getExpiry() const {
     return _expiry;
 }
@@ -16,6 +16,6 @@ double Option::payoffPath(const std::vector<double>& path) const {
     }
     return payoff(path.back());
 }
-// Virtual destructor definition
+// Virtual destructor
 Option::~Option() = default;
 

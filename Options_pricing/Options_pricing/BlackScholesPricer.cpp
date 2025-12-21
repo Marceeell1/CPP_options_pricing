@@ -16,7 +16,7 @@ BlackScholesPricer::BlackScholesPricer(Option* option,
 {
 }
 
-// Normal cumulative distribution function
+// Normal cdf
 double BlackScholesPricer::N(double x) const
 {
     return 0.5 * std::erfc(-x / std::sqrt(2.0));
@@ -25,7 +25,7 @@ double BlackScholesPricer::N(double x) const
 // Price of the option
 double BlackScholesPricer::operator()() const
 {
-    // First check if the option is a European vanilla option
+    // Check if the option is a European vanilla option
     if (auto* vanilla = dynamic_cast<EuropeanVanillaOption*>(_option))
     {
         double T = vanilla->getExpiry();
@@ -44,7 +44,7 @@ double BlackScholesPricer::operator()() const
         }
     }
 
-    // Then check if the option is a European digital option
+    // Check if the option is a European digital option
     if (auto* digital = dynamic_cast<EuropeanDigitalOption*>(_option))
     {
         double T = digital->getExpiry();
@@ -53,19 +53,19 @@ double BlackScholesPricer::operator()() const
         double d1, d2;
         compute_d1_d2(K, T, d1, d2);
 
-        // Cash-or-nothing digital options
+        // Cash or nothing
         if (digital->GetOptionType() == EuropeanDigitalOption::optionType::call)
         {
-            return std::exp(-_r * T) * N(d2);      // digital call price
+            return std::exp(-_r * T) * N(d2); // digital call price
         }
         else
         {
-            return std::exp(-_r * T) * N(-d2);     // digital put price
+            return std::exp(-_r * T) * N(-d2); // digital put price
         }
     }
 
-    // Unsupported option type (Asian, American, etc.)
-    throw std::runtime_error("BlackScholesPricer: unsupported option type (not European vanilla or digital)");
+    // Unsupported
+    throw std::runtime_error("BlackScholesPricer: unsupported option type");
 }
 
 // Delta
@@ -101,15 +101,15 @@ double BlackScholesPricer::delta() const
         double common = std::exp(-_r * T) * pdf_d2 / (_S * _sigma * std::sqrt(T));
 
         if (digital->GetOptionType() == EuropeanDigitalOption::optionType::call)
-            return common;      // digital call delta
+            return common; // digital call delta
         else
-            return -common;     // digital put delta
+            return -common; // digital put delta
     }
 
     throw std::runtime_error("BlackScholesPricer: delta not implemented for this option type");
 }
 
-// Compute d1 and d2 for the Black-Scholes formula
+// Compute d1 and d2 for the Black Scholes formula
 void BlackScholesPricer::compute_d1_d2(double K, double T,
     double& d1, double& d2) const
 {
